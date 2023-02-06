@@ -25,8 +25,8 @@
 ## ------------------------------------------------------------------
 
 ##:set background_image "./images/City_01WP.jpg"
-#:set background_image "./images/Leather_WP.jpg"
-#:set phimage_link "./images/Drone_04WP.png"
+#:set background_image "./images/RenderArt-StoneWallSTRWP.jpg"
+#:set phimage_link "./images/MinimalArt-CiytSTRWP.jpg"
 
 ## ----------------------------------------------------------------------------------------------
 ## transitions imported for screenchanges:
@@ -45,7 +45,7 @@
 ## Root Widget definition: ScreenManager                            ScreenManager       START   -
 ## ----------------------------------------------------------------------------------------------
 AppObjScreenManager:
-    id: "ThisIsYourROOTWidget"
+    id: ThisIsYourROOTWidget
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -78,6 +78,7 @@ AppObjScreenManager:
 <ScreenIntro@Screen>:
     name: "screen_intro"
     InScreenWindow:  ## Screen class is a widget, it is not filled up automatically
+        id: isw
         TitleLine:
             id: screen_intro_titleline
             size_hint: 1, 0.1                      ##  0.05
@@ -124,118 +125,42 @@ AppObjScreenManager:
 <OperationAreaBox@BoxLayout>:
 
 <OpAreaIntro@OperationAreaBox>:
-    Button:
-        background_normal: phimage_link
+    orientation: "vertical"
+    padding: 20
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            size_hint: 1, 0.1
+            text: "Wel-fucking-come to my little app"
+        Image:
+            id: qr_plot_layout
+            size_hint: 1, 0.8
+        Button:
+            size_hint: 1, 0.1
+            text: "change text"
+            on_release: root.on_buttonclick_edittext()
+
 
 <OpAreaMain@OperationAreaBox>:
     orientation: "vertical"
-    canvas.before:
-        Rectangle:
-            pos: self.pos
-            size: self.size
-            source: phimage_link
+    padding: 20
     BoxLayout:
-        orientation: "horizontal"
-        GridLayout:
-            size_hint: 0.2, 0.5
-            pos_hint: {"center_y": 0.5}
-            cols: 3
-            rows: 3
-            LabelSteerPH:
-                used_img: ""
-            ButtonDroneNav:
-                id: DN_throttle_up
-                ## text: "up"
-                dir: 1
-                on_press: root.on_press_dn_throttle(self)
-                on_state: root.on_state_dn_throttle(self)
-                on_release: root.on_release_dn_throttle(self)
-                background_normal: "./icons_button/ArrowUP.png"
-                background_down: "./icons_button/ArrowUP-down.png"
-            LabelSteerPH:
-                used_img: ""
-            ButtonDroneNav:
-                id: DN_yaw_left
-                dir: 1
-                ## text: "turn\nleft"
-                on_press: root.on_press_dn_yaw(self)
-                on_state: root.on_state_dn_yaw(self)
-                on_release: root.on_release_dn_yaw(self)
-                background_normal: "./icons_button/ArrowLEFT.png"
-                background_down: "./icons_button/ArrowLEFT-down.png"
-            LabelSteerPH:
-            ButtonDroneNav:
-                id: DN_yaw_right
-                dir: -1
-                ## text: "turn\nright"
-                on_press: root.on_press_dn_yaw(self)
-                on_state: root.on_state_dn_yaw(self)
-                on_release: root.on_release_dn_yaw(self)
-                background_normal: "./icons_button/ArrowRIGHT.png"
-                background_down: "./icons_button/ArrowRIGHT-down.png"
-            LabelSteerPH:
-                used_img: ""
-            ButtonDroneNav:
-                id: DN_throttle_down
-                ## text: "down"
-                dir: -1
-                on_press: root.on_press_dn_throttle(self)
-                on_state: root.on_state_dn_throttle(self)
-                on_release: root.on_release_dn_throttle(self)
-                background_normal: "./icons_button/ArrowDOWN.png"
-                background_down: "./icons_button/ArrowDOWN-down.png"
-            LabelSteerPH:
-                used_img: ""
-        BoxLayout:
-            size_hint: 0.6, 1
-            Label:
-                text: "flight_data"
-        GridLayout:
-            size_hint: 0.2, 0.5
-            pos_hint: {"center_y": 0.5}
-            cols: 3
-            rows: 3
-            LabelSteerPH:
-            ButtonDroneNav:
-                id: DN_pitch_forward
-                ## text: "forward"
-                dir: 1
-                on_press: root.on_press_dn_pitch(self)
-                on_state: root.on_state_dn_pitch(self)
-                on_release: root.on_release_dn_pitch(self)
-                background_normal: "./icons_button/ArrowUP.png"
-                background_down: "./icons_button/ArrowUP-down.png"
-            LabelSteerPH:
-            ButtonDroneNav:
-                id: DN_roll_left
-                ## text: "strafe\nleft"
-                dir: -1
-                on_press: root.on_press_dn_roll(self)
-                on_state: root.on_state_dn_roll(self)
-                on_release: root.on_release_dn_roll(self)
-                background_normal: "./icons_button/ArrowLEFT.png"
-                background_down: "./icons_button/ArrowLEFT-down.png"
-            LabelSteerPH:
-            ButtonDroneNav:
-                id: DN_roll_right
-                ## text: "strafe\nright"
-                dir: 1
-                on_press: root.on_press_dn_roll(self)
-                on_state: root.on_state_dn_roll(self)
-                on_release: root.on_release_dn_roll(self)
-                background_normal: "./icons_button/ArrowRIGHT.png"
-                background_down: "./icons_button/ArrowRIGHT-down.png"
-            LabelSteerPH:
-            ButtonDroneNav:
-                id: DN_pitch_back
-                ## text: "back"
-                dir: -1
-                on_press: root.on_press_dn_pitch(self)
-                on_state: root.on_state_dn_pitch(self)
-                on_release: root.on_release_dn_pitch(self)
-                background_normal: "./icons_button/ArrowDOWN.png"
-                background_down: "./icons_button/ArrowDOWN-down.png"
-            LabelSteerPH:
+        orientation: "vertical"
+        Label:
+            size_hint: 1, 0.2
+            text: "Enter string to be converted into QR code"
+        TextInput:
+            size_hint: 1, 0.6
+            id: str_2b_conv
+            hint_text: "Please enter sting to be converted into QR code!"
+            on_text: root.on_textupdate_textinput(self)
+        Button:
+            size_hint: 1, 0.2
+            id: button_convert
+            target: "screen_intro"
+            text: "press to convert"
+            on_release: root.on_buttonclick_generate_qr()
+
 
 <NavBar@BoxLayout>:
     id: navbar

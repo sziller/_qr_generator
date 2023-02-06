@@ -1,6 +1,9 @@
-import os
+import io
 import sys
-
+import os
+import pyqrcode
+import png
+import time
 
 from kivy.app import App  # necessary for the App class
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -10,7 +13,8 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.image import AsyncImage
 from kivy.uix.videoplayer import VideoPlayer
-from kivy.uix.camera import Camera, CoreCamera
+# from kivy.uix.camera import Camera, CoreCamera
+from kivy.uix.image import Image, CoreImage
 
 # Window.maximize()
 
@@ -73,12 +77,45 @@ class NavBar(BoxLayout):
                 App.get_running_app().root.current_screen.ids.navbar.ids[buttinst].disabled = False
                 App.get_running_app().root.current_screen.ids.navbar.ids[buttinst].state = "normal"
 
+
 class OperationAreaBox(BoxLayout):
     pass
 
-class OpAreaMain(OperationAreaBox):
-    pass
+class OpAreaIntro(OperationAreaBox):
+    def on_buttonclick_edittext(self):
+        App.get_running_app().change_screen(screen_name="screen_main",
+                                            screen_direction="left")
 
+class OpAreaMain(OperationAreaBox):
+    def __init__(self, **kwargs):
+        super(OpAreaMain, self).__init__(**kwargs)
+        self.string_tobe_converted: str = ""
+        self.qr_code = None
+
+    def on_textupdate_textinput(self, inst):
+        self.string_tobe_converted = inst.text
+        print(self.string_tobe_converted)
+
+    def on_buttonclick_generate_qr(self, mode: int = 3, *args, **kwargs):
+        """=== Function name: app_qr_generator_init ========================================================================
+        :param mode: int -  1 - display as pixels in terminal window
+                            2 - display in OS window
+                            4 - write to file
+        ============================================================================================== by Sziller ==="""
+
+        self.qr_code = pyqrcode.create(content=self.string_tobe_converted, mode="binary")
+
+        if mode in [1, 3, 5, 7]:
+            print(self.qr_code.terminal())
+
+        if mode in [2, 3, 6, 7]:
+            target = "fing.png"
+            self.qr_code.png(target, scale = 10)
+            App.get_running_app().root.ids.screen_intro.ids.opareaintro.ids.qr_plot_layout.source = target
+            App.get_running_app().root.ids.screen_intro.ids.opareaintro.ids.qr_plot_layout.reload()
+
+        App.get_running_app().change_screen(screen_name="screen_intro",
+                                            screen_direction="right")
 
 class AppObj(App):
     """=== Class name: CayMan ========================================================================================

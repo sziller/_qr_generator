@@ -1,13 +1,3 @@
-# pytest
+pytest
 PyQRCode
-# pypng
-# pyaml
-# OpenGLDisplay
-# MathFunctions
-# ComplexGeometry
-# ConsoleMessaging
-# IntegerOperations
-# FileProcessing
-# WindowRelated
-# base58
-# ecdsa
+pypng
