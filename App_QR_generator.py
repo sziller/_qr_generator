@@ -133,11 +133,8 @@ class OpAreaText(OperationAreaBox):
             self.ids.button_convert.disabled = True
             self.ids.labelinfo.text = "Enter string to be converted into QR code"
 
-    def on_buttonclick_generate_qr(self, mode: int = 3, *args, **kwargs):
+    def on_buttonclick_generate_qr(self):
         """=== Function name: app_qr_generator_init ====================================================================
-        :param mode: int -  1 - display as pixels in terminal window
-                            2 - display in OS window
-                            4 - write to file
         ========================================================================================== by Sziller ==="""
         self.qr_code_list = []
         self.qr_path_list = []
@@ -148,15 +145,17 @@ class OpAreaText(OperationAreaBox):
             print(qr.terminal())
             target = "qr_{:0>3}.png".format(c)
             self.qr_path_list.append(target)
-            qr.png(target, scale = 10)
+            qr.png(target, scale=10)
+
+        print(self.qr_path_list)
 
         if len(self.qr_code_list) > 1:
             App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.browse_qr_prev.disabled = False
             App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.browse_qr_next.disabled = False
 
         App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.qr_plot_layout.source = self.qr_path_list[0]
-        #    App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.qr_plot_layout.reload()
-#
+        App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.qr_plot_layout.source.update()
+
         App.get_running_app().change_screen(screen_name="screen_disp", screen_direction="right")
         App.get_running_app().root.ids.screen_disp.ids.opareaintro.qr_path_list = self.qr_path_list
 
