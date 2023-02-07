@@ -1,18 +1,13 @@
-import pyqrcode
-import tkinter
-# Create and render the QR code
-code = pyqrcode.create('Knights who say ni!')
-code_xbm = code.xbm(scale=5)
-# Create a tk window
-top = tkinter.Tk()
-# Make generate the bitmap image from the redered code
-code_bmp = tkinter.BitmapImage(data=code_xbm)
-# Set the code to have a white background,
-# instead of transparent
-code_bmp.config(background="white")
-# Bitmaps are accepted by lots of Widgets
-label = tkinter.Label(image=code_bmp)
-# The QR code is now visible
-label.pack()
+def div_string(string: str, size: int) -> list:
+    """=== Method name: div_string =====================================================================================
+    Returns a list on strings, each made up of <size> number of characters
+    :param string: str - the string you want to divide
+    :param size: integer - the size of the segments
+    ============================================================================================== by Sziller ==="""
+    return [string[start:start+size] for start in range(0, len(string), size)]
 
-top.mainloop()
+
+if __name__ == "__main__":
+    szoveg = "123456789\n123456789\n123456789\n123456789\n123456789"
+    for _ in div_string(szoveg, 11):
+        print(_)

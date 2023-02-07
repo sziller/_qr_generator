@@ -28,16 +28,17 @@ class AppObjScreenManager(ScreenManager):
     def __init__(self, **kwargs):
         super(AppObjScreenManager, self).__init__(**kwargs)
         self.statedict = {
-            "screen_main":  {
-                "seq": 1,
-                'inst': 'button_nav_main',
-                'down': ['button_nav_main'],
-                'normal': ["button_nav_intro"]},
-            "screen_intro": {
+            "screen_disp": {
                 "seq": 0,
                 'inst': 'button_nav_intro',
                 'down': ['button_nav_intro'],
-                'normal': ["button_nav_main"]}
+                'normal': ["button_nav_main"]},
+            "screen_text":  {
+                "seq": 1,
+                'inst': 'button_nav_main',
+                'down': ['button_nav_main'],
+                'normal': ["button_nav_intro"]}
+
             }
 
 
@@ -82,41 +83,60 @@ class NavBar(BoxLayout):
 class OperationAreaBox(BoxLayout):
     pass
 
+
 class OpAreaIntro(OperationAreaBox):
     def on_buttonclick_edittext(self):
-        App.get_running_app().change_screen(screen_name="screen_main",
+        App.get_running_app().change_screen(screen_name="screen_text",
                                             screen_direction="left")
+
 
 class OpAreaMain(OperationAreaBox):
     def __init__(self, **kwargs):
         super(OpAreaMain, self).__init__(**kwargs)
-        self.string_tobe_converted: str = ""
-        self.qr_code = None
+        self.full_string_tobe_converted: str    = ""
+        self.stringlist_tobe_converted: list    = []
+        self.qr_code_list: list                 = []
+        self.qr_path_list: list                 = []
+        self.char_limit: int                    = 400
+
+    @staticmethod
+    def div_string(string: str, size: int) -> list:
+        """=== Method name: div_string =================================================================================
+        Returns a list on strings, each made up of <size> number of characters
+        :param string: str - the string you want to divide
+        :param size: integer - the size of the segments
+        ========================================================================================== by Sziller ==="""
+        return [string[start:start+size] for start in range(0, len(string), size)]
 
     def on_textupdate_textinput(self, inst):
-        self.string_tobe_converted = inst.text
-        print(self.string_tobe_converted)
+        self.full_string_tobe_converted = inst.text
+        self.stringlist_tobe_converted = self.div_string(string=self.full_string_tobe_converted, size=self.char_limit)
+        for _ in self.stringlist_tobe_converted:
+            print("----")
+            print(_)
 
     def on_buttonclick_generate_qr(self, mode: int = 3, *args, **kwargs):
-        """=== Function name: app_qr_generator_init ========================================================================
+        """=== Function name: app_qr_generator_init ====================================================================
         :param mode: int -  1 - display as pixels in terminal window
                             2 - display in OS window
                             4 - write to file
-        ============================================================================================== by Sziller ==="""
+        ========================================================================================== by Sziller ==="""
+        self.qr_code_list = []
+        self.qr_path_list = []
+        for str_seg in self.stringlist_tobe_converted:
+            self.qr_code_list.append(pyqrcode.create(content=str_seg, mode="binary"))
 
-        self.qr_code = pyqrcode.create(content=self.string_tobe_converted, mode="binary")
+        for c, qr in enumerate(self.qr_code_list):
+            print(qr.terminal())
+            target = "qr_{:0>3}.png".format(c)
+            self.qr_path_list.append(target)
+            qr.png(target, scale = 10)
 
-        if mode in [1, 3, 5, 7]:
-            print(self.qr_code.terminal())
+        App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.qr_plot_layout.source = self.qr_path_list[0]
+        #    App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.qr_plot_layout.reload()
+#
+        App.get_running_app().change_screen(screen_name="screen_disp", screen_direction="right")
 
-        if mode in [2, 3, 6, 7]:
-            target = "fing.png"
-            self.qr_code.png(target, scale = 10)
-            App.get_running_app().root.ids.screen_intro.ids.opareaintro.ids.qr_plot_layout.source = target
-            App.get_running_app().root.ids.screen_intro.ids.opareaintro.ids.qr_plot_layout.reload()
-
-        App.get_running_app().change_screen(screen_name="screen_intro",
-                                            screen_direction="right")
 
 class AppObj(App):
     """=== Class name: CayMan ========================================================================================

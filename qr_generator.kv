@@ -9,7 +9,7 @@
 #:set fs_subtitle 16
 
 #:set fn_subsubtitle "./fonts/Ubuntu-B.ttf"
-#:set fs_subsubtitle 11
+#:set fs_subsubtitle 14
 
 #:set fn_button "./fonts/Ubuntu-BI.ttf"
 #:set fs_button 14
@@ -27,7 +27,7 @@
 ##:set background_image "./images/City_01WP.jpg"
 #:set background_image "./images/RenderArt-StoneWallSTRWP.jpg"
 #:set defaultQR "./qrcodes/_QR_default.png"
-#:set phimage_link "./icons/Caution.png"
+#:set phimage_link "./icons/caution.png"
 
 ## ----------------------------------------------------------------------------------------------
 ## transitions imported for screenchanges:
@@ -52,10 +52,11 @@ AppObjScreenManager:
             pos: self.pos
             size: self.size
             source: background_image
-    ScreenIntro:
-        id: screen_intro
-    ScreenMain:
-        id: screen_main
+    ScreenText:
+        id: screen_text
+    ScreenDisp:
+        id: screen_disp
+    
 
 <AppObjScreenManager@ScreenManager>:
     ## transition: NoTransition()
@@ -76,14 +77,33 @@ AppObjScreenManager:
     orientation: "vertical"
 
 
-<ScreenIntro@Screen>:
-    name: "screen_intro"
+<ScreenText@Screen>:
+    name: "screen_text"
+    InScreenWindow:
+        TitleLine:
+            id: screen_text_titleline
+            size_hint: 1, 0.1                      ##  0.05
+            display_title: "Sziller's QR-code generator"
+        ## NavBar:
+        ##     id: navbar
+        ##     size_hint: 1, 0.1                      ##  0.05    < 0.10
+        OpAreaMain:
+            size_hint: 1, 0.85                       ##  0.9     < 1
+            id: opareamain
+        Ribbon:
+            id: ribbon_main
+            size_hint: 1, 0.05
+            text_ribbon: "by Sziller"
+            image_source: phimage_link
+
+<ScreenDisp@Screen>:
+    name: "screen_disp"
     InScreenWindow:  ## Screen class is a widget, it is not filled up automatically
         id: isw
         TitleLine:
-            id: screen_intro_titleline
+            id: screen_disp_titleline
             size_hint: 1, 0.1                      ##  0.05
-            display_title: "Sziller's QR generator"
+            display_title: "Read and save your QR code"
         ## NavBar:
         ##     id: navbar
         ##     size_hint: 1, 0.1                      ##  0.05    < 0.10
@@ -96,24 +116,6 @@ AppObjScreenManager:
             text_ribbon: "by Sziller"
             image_source: phimage_link
 
-<ScreenMain@Screen>:
-    name: "screen_main"
-    InScreenWindow:
-        TitleLine:
-            id: screen_main_titleline
-            size_hint: 1, 0.1                      ##  0.05
-            display_title: "QR generator"
-        ## NavBar:
-        ##     id: navbar
-        ##     size_hint: 1, 0.1                      ##  0.05    < 0.10
-        OpAreaMain:
-            size_hint: 1, 0.85                       ##  0.9     < 1
-            id: opareamain
-        Ribbon:
-            id: ribbon_main
-            size_hint: 1, 0.05
-            text_ribbon: "by Sziller"
-            image_source: phimage_link
 
 <TitleLine@BoxLayout>:
     display_title: "default"
@@ -159,7 +161,7 @@ AppObjScreenManager:
                 on_text: root.on_textupdate_textinput(self)
         ButtonConfirm:
             id: button_convert
-            target: "screen_intro"
+            target: "screen_disp"
             text: "press to convert"
             on_release: root.on_buttonclick_generate_qr()
 
@@ -170,13 +172,13 @@ AppObjScreenManager:
     size_hint: 1, 0.05
     ButtonScreenNav:
         id: button_nav_intro
-        target: "screen_intro"
+        target: "screen_disp"
         disabled: True
         text: "welcome to visor"
         on_release: root.on_release_navbar(self)
     ButtonScreenNav:
         id: button_nav_main
-        target: "screen_main"
+        target: "screen_text"
         text: "transaction handler"
         on_release: root.on_release_navbar(self)
 
@@ -194,8 +196,8 @@ AppObjScreenManager:
         padding: (10, 0)
         text: root.text_ribbon
     AsyncImage:
-        keep_ratio: False
-        allow_stretch: True
+        keep_ratio: True
+        allow_stretch: False
         size_hint: 0.05, 1
         source: root.image_source
 
@@ -258,16 +260,17 @@ AppObjScreenManager:
 <LabelInfo@Label>:
     canvas.before:
         Color:
-            rgba: 1, 1, 1, 0.2
+            rgba: 0, 0, 0, 0.4
         Rectangle:
             pos: self.pos
             size: self.size
+    color: 1, 1, 1, 1
     size_hint: 1, 0.15
     font_size: fs_subsubtitle
     font_name: fn_subsubtitle
     text_size: self.size
     halign: 'center'  ## center, right, left
-    valign: 'top'  ## middle, top, bottom
+    valign: 'center'  ## middle, top, bottom
 
 <TextInParagraph@TextInput>:
     font_name: fn_data
