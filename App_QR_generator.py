@@ -70,12 +70,13 @@ class NavBar(BoxLayout):
         App.get_running_app().change_screen(screen_name=inst.target, screen_direction={True: "left", False: "right"}
         [old_seq - new_seq < 0])
         for buttinst in App.get_running_app().root.current_screen.ids.navbar.ids:
-            if buttinst in App.get_running_app().root.statedict[inst.target]['down']:
-                App.get_running_app().root.current_screen.ids.navbar.ids[buttinst].disabled = True
-                App.get_running_app().root.current_screen.ids.navbar.ids[buttinst].state = "normal"
+            print(buttinst)
             if buttinst in App.get_running_app().root.statedict[inst.target]['normal']:
                 App.get_running_app().root.current_screen.ids.navbar.ids[buttinst].disabled = False
                 App.get_running_app().root.current_screen.ids.navbar.ids[buttinst].state = "normal"
+            if buttinst in App.get_running_app().root.statedict[inst.target]['down']:
+                App.get_running_app().root.current_screen.ids.navbar.ids[buttinst].disabled = True
+                App.get_running_app().root.current_screen.ids.navbar.ids[buttinst].state = "down"
 
 
 class OperationAreaBox(BoxLayout):
@@ -151,7 +152,7 @@ if __name__ == "__main__":
     from kivy.lang import Builder  # to freely pick kivy files
 
     display_settings = {0: {'fullscreen': False, 'run': Window.maximize},
-                        1: {'fullscreen': False, 'size': (600, 1000)},
+                        1: {'fullscreen': False, 'size': (400, 800)},
                         2: {'fullscreen': False, 'size': (600, 400)},
                         3: {'fullscreen': False, 'size': (1000, 500)}}
 

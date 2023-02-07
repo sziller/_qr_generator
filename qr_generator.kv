@@ -26,7 +26,8 @@
 
 ##:set background_image "./images/City_01WP.jpg"
 #:set background_image "./images/RenderArt-StoneWallSTRWP.jpg"
-#:set phimage_link "./images/MinimalArt-CiytSTRWP.jpg"
+#:set defaultQR "./qrcodes/_QR_default.png"
+#:set phimage_link "./icons/Caution.png"
 
 ## ----------------------------------------------------------------------------------------------
 ## transitions imported for screenchanges:
@@ -83,16 +84,16 @@ AppObjScreenManager:
             id: screen_intro_titleline
             size_hint: 1, 0.1                      ##  0.05
             display_title: "Sziller's QR generator"
-        NavBar:
-            id: navbar
-            size_hint: 1, 0.1                      ##  0.05    < 0.10
+        ## NavBar:
+        ##     id: navbar
+        ##     size_hint: 1, 0.1                      ##  0.05    < 0.10
         OpAreaIntro:
-            size_hint: 1, 0.75                       ##  0.9     < 1
+            size_hint: 1, 0.85                       ##  0.9     < 1
             id: opareaintro
         Ribbon:
             id: ribbon_intro
             size_hint: 1, 0.05
-            text_ribbon: "Bottom of ScreenIntro"
+            text_ribbon: "by Sziller"
             image_source: phimage_link
 
 <ScreenMain@Screen>:
@@ -102,16 +103,16 @@ AppObjScreenManager:
             id: screen_main_titleline
             size_hint: 1, 0.1                      ##  0.05
             display_title: "QR generator"
-        NavBar:
-            id: navbar
-            size_hint: 1, 0.1                      ##  0.05    < 0.10
+        ## NavBar:
+        ##     id: navbar
+        ##     size_hint: 1, 0.1                      ##  0.05    < 0.10
         OpAreaMain:
-            size_hint: 1, 0.75                       ##  0.9     < 1
+            size_hint: 1, 0.85                       ##  0.9     < 1
             id: opareamain
         Ribbon:
             id: ribbon_main
             size_hint: 1, 0.05
-            text_ribbon: "Bottom of ScreenMain"
+            text_ribbon: "by Sziller"
             image_source: phimage_link
 
 <TitleLine@BoxLayout>:
@@ -123,39 +124,40 @@ AppObjScreenManager:
         text: root.display_title
 
 <OperationAreaBox@BoxLayout>:
+    orientation: "vertical"
 
 <OpAreaIntro@OperationAreaBox>:
-    orientation: "vertical"
-    padding: 20
     BoxLayout:
+        padding: 20
+        spacing: 20
         orientation: "vertical"
-        Label:
-            size_hint: 1, 0.1
-            text: "Wel-fucking-come to my little app"
-        Image:
+        LabelInfo:
+            text: "Welcome to my little app. Scan QR code here,\nor modify your text."
+        AsyncImage:
             id: qr_plot_layout
-            size_hint: 1, 0.8
-        Button:
-            size_hint: 1, 0.1
+            size_hint: 1, 0.7
+            source: defaultQR
+        ButtonConfirm:
             text: "change text"
             on_release: root.on_buttonclick_edittext()
 
-
 <OpAreaMain@OperationAreaBox>:
-    orientation: "vertical"
-    padding: 20
     BoxLayout:
+        padding: 20
+        spacing: 20
         orientation: "vertical"
-        Label:
-            size_hint: 1, 0.2
+        LabelInfo:
             text: "Enter string to be converted into QR code"
-        TextInput:
-            size_hint: 1, 0.6
-            id: str_2b_conv
-            hint_text: "Please enter sting to be converted into QR code!"
-            on_text: root.on_textupdate_textinput(self)
-        Button:
-            size_hint: 1, 0.2
+        ScrollView:
+            id: scrlv
+            size_hint: 1, 0.7
+            TextInParagraph:
+                height: max(self.minimum_height, scrlv.height)
+                size_hint: 1, None
+                id: str_2b_conv
+                hint_text: "Please enter sting to be converted into QR code!"
+                on_text: root.on_textupdate_textinput(self)
+        ButtonConfirm:
             id: button_convert
             target: "screen_intro"
             text: "press to convert"
@@ -179,11 +181,17 @@ AppObjScreenManager:
         on_release: root.on_release_navbar(self)
 
 <Ribbon@BoxLayout>:
-    text_ribbon: "N/A"
+    text_ribbon: "by Sziller"
     image_source: None
     orientation: "horizontal"
     Label:
+        halign: 'right'  ## center, right, left
+        valign: 'middle'  ## middle, top, bottom
+        font_name: fn_button
+        font_size: fs_button
         size_hint: 0.95, 1
+        text_size: self.size
+        padding: (10, 0)
         text: root.text_ribbon
     AsyncImage:
         keep_ratio: False
@@ -198,6 +206,7 @@ AppObjScreenManager:
 <ButtonScreenNav@Button>:
     font_name: fn_button
     font_size: fs_button
+    background_color: 0.3, 0.4, 0.3, 0.45
     target: ""
     text_size: self.size
     color: (1, 1, 1)
@@ -216,6 +225,11 @@ AppObjScreenManager:
     text: ""
     halign: 'center'  ## center, right, left
     valign: 'middle'  ## middle, top, bottom
+
+<ButtonConfirm@Button>:
+    size_hint: 0.5, 0.15
+    pos_hint: {"center_x": .5, "center_y": .5}
+
 
 #   ---------------------------------------------------------------------
 #   - Button:                                                   ENDED   -
@@ -240,3 +254,31 @@ AppObjScreenManager:
     ##    keep_ratio: False
     ##    allow_stretch: True
     ##    source: root.used_img
+
+<LabelInfo@Label>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 0.2
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    size_hint: 1, 0.15
+    font_size: fs_subsubtitle
+    font_name: fn_subsubtitle
+    text_size: self.size
+    halign: 'center'  ## center, right, left
+    valign: 'top'  ## middle, top, bottom
+
+<TextInParagraph@TextInput>:
+    font_name: fn_data
+    font_size: fs_data
+    text_size: self.size
+    line_height: 40
+    focus: True
+    hint_text: "enter project name"
+    padding: (2, 2)
+    foreground_color: (1,1,1,1)
+    background_color: (1,1,1,0.2)
+    cursor_color: (1,1,1,1)
+    halign: 'left'  ## center, right, left
+    valign: 'middle'  ## middle, top, bottom
