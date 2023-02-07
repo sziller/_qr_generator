@@ -90,9 +90,9 @@ class OpAreaIntro(OperationAreaBox):
                                             screen_direction="left")
 
 
-class OpAreaMain(OperationAreaBox):
+class OpAreaText(OperationAreaBox):
     def __init__(self, **kwargs):
-        super(OpAreaMain, self).__init__(**kwargs)
+        super(OpAreaText, self).__init__(**kwargs)
         self.full_string_tobe_converted: str    = ""
         self.stringlist_tobe_converted: list    = []
         self.qr_code_list: list                 = []
@@ -111,9 +111,13 @@ class OpAreaMain(OperationAreaBox):
     def on_textupdate_textinput(self, inst):
         self.full_string_tobe_converted = inst.text
         self.stringlist_tobe_converted = self.div_string(string=self.full_string_tobe_converted, size=self.char_limit)
-        for _ in self.stringlist_tobe_converted:
-            print("----")
-            print(_)
+
+        if self.full_string_tobe_converted:
+            self.ids.button_convert.disabled = False
+            self.ids.labelinfo.text = "Once your text is fully entered, press button on bottom of this page."
+        else:
+            self.ids.button_convert.disabled = True
+            self.ids.labelinfo.text = "Enter string to be converted into QR code"
 
     def on_buttonclick_generate_qr(self, mode: int = 3, *args, **kwargs):
         """=== Function name: app_qr_generator_init ====================================================================
