@@ -132,9 +132,29 @@ AppObjScreenManager:
         padding: 20
         spacing: 20
         orientation: "vertical"
-        LabelInfo:
-            id: labelinfo
-            text: "Welcome to my little app. Scan QR code here,\nor modify your text."
+        BoxLayout:
+            size_hint: 1, 0.15
+            orientation: "horizontal"
+            Button:
+                id: browse_qr_prev
+                disabled: True
+                add: -1
+                size_hint: 0.05, 1
+                pos_hint: {"center_y": 0.5}
+                text: "<"
+                on_release: root.on_buttonclick_qr_browse(self)
+            LabelInfo:
+                id: labelinfo
+                size_hint: 0.9, 1
+                text: "Welcome to my little app. Scan QR code here,\nor modify your text."
+            Button:
+                id: browse_qr_next
+                disabled: True
+                add: 1
+                size_hint: 0.05, 1
+                pos_hint: {"center_y": 0.5}
+                text: ">"
+                on_release: root.on_buttonclick_qr_browse(self)
         AsyncImage:
             id: qr_plot_layout
             size_hint: 1, 0.7
@@ -150,6 +170,7 @@ AppObjScreenManager:
         orientation: "vertical"
         LabelInfo:
             id: labelinfo
+            size_hint: 1, 0.15
             text: "Enter string to be converted into QR code"
         ScrollView:
             id: scrlv
@@ -166,7 +187,6 @@ AppObjScreenManager:
             target: "screen_disp"
             text: "convert text"
             on_release: root.on_buttonclick_generate_qr()
-
 
 <NavBar@BoxLayout>:
     id: navbar
@@ -267,7 +287,6 @@ AppObjScreenManager:
             pos: self.pos
             size: self.size
     color: 1, 1, 1, 1
-    size_hint: 1, 0.15
     font_size: fs_subsubtitle
     font_name: fn_subsubtitle
     text_size: self.size

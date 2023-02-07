@@ -85,9 +85,23 @@ class OperationAreaBox(BoxLayout):
 
 
 class OpAreaIntro(OperationAreaBox):
+    def __init__(self, **kwargs):
+        super(OpAreaIntro, self).__init__(**kwargs)
+        self.qr_path_list: list = []
+
     def on_buttonclick_edittext(self):
         App.get_running_app().change_screen(screen_name="screen_text",
                                             screen_direction="left")
+
+    def on_buttonclick_qr_browse(self, inst):
+        print("Pushed on_buttonclick_qr_browse")
+        # self.qr_counter += inst.add
+        # if self.qr_counter >= len(self.qr_list): self.qr_counter = 0
+        # if self.qr_counter < 0: self.qr_counter = len(self.qr_list) - 1
+        # self.ids.qr_count.text = str(self.qr_counter)
+        # self.ids.qr_plot_layout.remove_widget(self.ids.qr_plot_layout.displayed_qr)
+        # passed = AsyncImage(source="./qrcodes/" + self.qr_list[self.qr_counter])
+        # self.ids.qr_plot_layout.swap_displayed_qr_widget(received=passed)
 
 
 class OpAreaText(OperationAreaBox):
@@ -136,10 +150,15 @@ class OpAreaText(OperationAreaBox):
             self.qr_path_list.append(target)
             qr.png(target, scale = 10)
 
+        if len(self.qr_code_list) > 1:
+            App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.browse_qr_prev.disabled = False
+            App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.browse_qr_next.disabled = False
+
         App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.qr_plot_layout.source = self.qr_path_list[0]
         #    App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.qr_plot_layout.reload()
 #
         App.get_running_app().change_screen(screen_name="screen_disp", screen_direction="right")
+        App.get_running_app().root.ids.screen_disp.ids.opareaintro.qr_path_list = self.qr_path_list
 
 
 class AppObj(App):
