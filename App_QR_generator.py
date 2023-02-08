@@ -90,17 +90,17 @@ class OpAreaIntro(OperationAreaBox):
         self.qr_path_list: list = []
         self.qr_counter: int = 0
 
-    def on_buttonclick_edittext(self):
+    @staticmethod
+    def on_buttonclick_edittext():
         App.get_running_app().change_screen(screen_name="screen_text",
                                             screen_direction="left")
 
     def on_buttonclick_qr_browse(self, inst):
-        print("Pushed on_buttonclick_qr_browse")
         self.qr_counter += inst.add
         if self.qr_counter >= len(self.qr_path_list): self.qr_counter = 0
         if self.qr_counter < 0: self.qr_counter = len(self.qr_path_list) - 1
         self.ids.qr_plot_layout.source = self.qr_path_list[self.qr_counter]
-        self.ids.labelinfo.text = "Displaying the QR nr.{:>3}:\n{}".format(self.qr_counter + 1, self.qr_path_list[self.qr_counter])
+        self.ids.labelinfo.text = "Displaying QR nr.{:>3}:\n{}".format(self.qr_counter + 1, self.qr_path_list[self.qr_counter])
 
 class OpAreaText(OperationAreaBox):
     def __init__(self, **kwargs):
@@ -141,16 +141,14 @@ class OpAreaText(OperationAreaBox):
 
         for c, qr in enumerate(self.qr_code_list):
             print(qr.terminal())
-            target = "qr_{:0>3}.png".format(c+1)
+            target = "./qrcodes/qr_{:0>3}.png".format(c+1)
             self.qr_path_list.append(target)
             qr.png(target, scale=10)
-
-        print(self.qr_path_list)
 
         if len(self.qr_code_list) > 1:
             App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.browse_qr_prev.disabled = False
             App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.browse_qr_next.disabled = False
-            msg = "Displaying the QR nr.{:>3}:\n{}".format(1, self.qr_path_list[0])
+            msg = "Displaying QR nr.{:>3}:\n{}".format(1, self.qr_path_list[0])
         else:
             msg = "Read your QR code below:"
 

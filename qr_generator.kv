@@ -208,14 +208,7 @@ AppObjScreenManager:
     text_ribbon: "by Sziller"
     image_source: None
     orientation: "horizontal"
-    Label:
-        halign: 'right'  ## center, right, left
-        valign: 'middle'  ## middle, top, bottom
-        font_name: fn_button
-        font_size: fs_button
-        size_hint: 0.95, 1
-        text_size: self.size
-        padding: (10, 0)
+    LabelRibbon:
         text: root.text_ribbon
     AsyncImage:
         keep_ratio: True
@@ -239,17 +232,6 @@ AppObjScreenManager:
     halign: 'center'  ## center, right, left
     valign: 'middle'  ## middle, top, bottom
 
-<ButtonDroneNav@Button>:
-    font_name: fn_button
-    font_size: fs_button
-    target: ""
-    text_size: self.size
-    color: (1, 1, 1)
-    padding: (2, 2)
-    text: ""
-    halign: 'center'  ## center, right, left
-    valign: 'middle'  ## middle, top, bottom
-
 <ButtonConfirm@Button>:
     font_name: fn_button
     font_size: fs_button
@@ -262,7 +244,6 @@ AppObjScreenManager:
 #   - Button:                                                   ENDED   -
 #   ---------------------------------------------------------------------
 
-
 #   ---------------------------------------------------------------------
 #   - Label:                                                    START   -
 #   ---------------------------------------------------------------------
@@ -270,17 +251,6 @@ AppObjScreenManager:
 <ScreenTitleLabel@Label>:
     font_size: fs_title
     font_name: fn_title
-
-<LabelPH@Label>:
-
-<LabelSteerPH@Label>:
-    used_img: None
-    ##AsyncImage:
-    ##    pos: root.pos
-    ##    size: root.size
-    ##    keep_ratio: False
-    ##    allow_stretch: True
-    ##    source: root.used_img
 
 <LabelInfo@Label>:
     canvas.before:
@@ -296,6 +266,25 @@ AppObjScreenManager:
     halign: 'center'  ## center, right, left
     valign: 'center'  ## middle, top, bottom
 
+<LabelRibbon@Label>:
+    halign: 'right'  ## center, right, left
+    valign: 'middle'  ## middle, top, bottom
+    font_name: fn_button
+    font_size: fs_button
+    size_hint: 0.95, 1
+    text_size: self.size
+    padding: (10, 0)
+
+<LabelPH@Label>:
+
+#   ---------------------------------------------------------------------
+#   - Label:                                                    ENDED   -
+#   ---------------------------------------------------------------------
+
+#   ---------------------------------------------------------------------
+#   - TextInput:                                                START   -
+#   ---------------------------------------------------------------------
+
 <TextInParagraph@TextInput>:
     font_name: fn_data
     font_size: fs_data
@@ -309,3 +298,7 @@ AppObjScreenManager:
     cursor_color: (1,1,1,1)
     halign: 'left'  ## center, right, left
     valign: 'middle'  ## middle, top, bottom
+
+#   ---------------------------------------------------------------------
+#   - TextInput:                                                ENDED   -
+#   ---------------------------------------------------------------------
