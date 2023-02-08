@@ -99,11 +99,8 @@ class OpAreaIntro(OperationAreaBox):
         self.qr_counter += inst.add
         if self.qr_counter >= len(self.qr_path_list): self.qr_counter = 0
         if self.qr_counter < 0: self.qr_counter = len(self.qr_path_list) - 1
-        # self.ids.qr_count.text = str(self.qr_counter)
-        # self.ids.qr_plot_layout.remove_widget(self.ids.qr_plot_layout.displayed_qr)
-        # passed = AsyncImage(source="./qrcodes/" + self.qr_list[self.qr_counter])
-        # self.ids.qr_plot_layout.swap_displayed_qr_widget(received=passed)
         self.ids.qr_plot_layout.source = self.qr_path_list[self.qr_counter]
+        self.ids.labelinfo.text = "Displaying the QR nr.{:>3}:\n{}".format(self.qr_counter + 1, self.qr_path_list[self.qr_counter])
 
 class OpAreaText(OperationAreaBox):
     def __init__(self, **kwargs):
@@ -144,7 +141,7 @@ class OpAreaText(OperationAreaBox):
 
         for c, qr in enumerate(self.qr_code_list):
             print(qr.terminal())
-            target = "qr_{:0>3}.png".format(c)
+            target = "qr_{:0>3}.png".format(c+1)
             self.qr_path_list.append(target)
             qr.png(target, scale=10)
 
@@ -153,12 +150,18 @@ class OpAreaText(OperationAreaBox):
         if len(self.qr_code_list) > 1:
             App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.browse_qr_prev.disabled = False
             App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.browse_qr_next.disabled = False
+            msg = "Displaying the QR nr.{:>3}:\n{}".format(1, self.qr_path_list[0])
+        else:
+            msg = "Read your QR code below:"
 
+        App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.labelinfo.text = msg
         App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.qr_plot_layout.source = self.qr_path_list[0]
         App.get_running_app().root.ids.screen_disp.ids.opareaintro.ids.qr_plot_layout.reload()
 
         App.get_running_app().change_screen(screen_name="screen_disp", screen_direction="right")
         App.get_running_app().root.ids.screen_disp.ids.opareaintro.qr_path_list = self.qr_path_list
+
+
 
 
 class AppObj(App):
@@ -204,8 +207,6 @@ if __name__ == "__main__":
     Window.fullscreen = display_settings[style_code]['fullscreen']
     if 'size' in display_settings[style_code].keys(): Window.size = display_settings[style_code]['size']
     if 'run' in display_settings[style_code].keys(): display_settings[style_code]['run']()
-
-
 
     try:
         content = Builder.load_file(str(sys.argv[1]))

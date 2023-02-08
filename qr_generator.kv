@@ -185,7 +185,7 @@ AppObjScreenManager:
             id: button_convert
             disabled: True
             target: "screen_disp"
-            text: "convert text"
+            text: "create QR code"
             on_release: root.on_buttonclick_generate_qr()
 
 <NavBar@BoxLayout>:
@@ -251,7 +251,10 @@ AppObjScreenManager:
     valign: 'middle'  ## middle, top, bottom
 
 <ButtonConfirm@Button>:
-    size_hint: 0.5, 0.15
+    font_name: fn_button
+    font_size: fs_button
+    size_hint: 0.5, None # 0.15
+    height: dp(60)
     pos_hint: {"center_x": .5, "center_y": .5}
 
 
